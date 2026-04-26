@@ -91,7 +91,7 @@ npm run dev
 
 ## Documentation
 
-- High-Level Design → `/docs/high-level-design.md`
+- [Architecture](./docs/architecture.md) - System design, data flows, and AI integration
 
 ## Purpose
 
