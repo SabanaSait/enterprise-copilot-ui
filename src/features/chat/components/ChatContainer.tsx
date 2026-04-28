@@ -9,8 +9,11 @@ export function ChatContainer() {
 
   return (
     <div className="flex h-screen flex-col">
+      <div className="p-4 text-xl font-semibold border-b">
+        Enterprise Copilot
+      </div>
       <MessageList messages={messages} isLoading={isLoading}></MessageList>
-      <ChatInput onSend={sendMessage}></ChatInput>
+      <ChatInput onSend={sendMessage} isLoading={isLoading}></ChatInput>
     </div>
   );
 }
