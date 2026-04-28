@@ -40,11 +40,10 @@ This project extends an existing full-stack system by introducing a React-based 
 
 ### Frontend
 
-- Next.js (React)
-- TypeScript
-- Tailwind CSS
-- Zustand (state management)
-- TanStack Query (data fetching)
+- Next.js (App Router, v16.2.4)
+- React (v19.2.4)
+- TypeScript (v5.9.3)
+- Tailwind CSS (v4.2.4)
 
 ### Backend (Integrated)
 
