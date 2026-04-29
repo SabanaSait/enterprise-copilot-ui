@@ -16,9 +16,10 @@ export function MessageItem({ message }: Props) {
           isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
         }`}
       >
-        {message.content || (
-          <span className="italic text-gray-500 animate-pulse">Typing...</span>
-        )}
+        {message.content ||
+          (message.role === "assistant" && message.status === "typing" && (
+            <span className="italic text-gray-500 animate-pulse">● ● ●</span>
+          ))}
       </div>
     </div>
   );
