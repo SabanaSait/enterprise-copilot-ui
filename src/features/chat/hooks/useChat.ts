@@ -1,6 +1,11 @@
 "use client";
 import { useReducer } from "react";
-import type { ChatMessage, ChatState, ChatAction } from "../types/chat.types";
+import type {
+  ChatMessage,
+  ChatState,
+  ChatAction,
+  MessageStatus,
+} from "../types/chat.types";
 
 const initialState: ChatState = {
   messages: [],
@@ -40,13 +45,14 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
 function createMessage(
   role: ChatMessage["role"],
   content: string,
+  status: MessageStatus = "sent",
 ): ChatMessage {
   return {
     id: crypto.randomUUID(),
     role,
     content,
     createdAt: Date.now(),
-    status: "sent",
+    status,
   };
 }
 
@@ -64,20 +70,32 @@ export function useChat() {
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
 
-    // 1. Add user message
     const userMessage = createMessage("user", content);
     dispatch({ type: "ADD_MESSAGE", payload: userMessage });
-
-    // 2. Set loading
     dispatch({ type: "SET_LOADING", payload: true });
 
     try {
-      // 3. Get AI response
-      const response = await mockAIResponse(content);
+      const aiMessage = createMessage("assistant", "", "typing");
 
-      // 4. Add assistant message
-      const aiMessage = createMessage("assistant", response);
       dispatch({ type: "ADD_MESSAGE", payload: aiMessage });
+
+      const fullText = `AI Response to: "${content}"`;
+
+      let currentText = "";
+
+      for (let i = 0; i < fullText.length; i++) {
+        currentText += fullText[i];
+
+        await new Promise((resolve) => setTimeout(resolve, 20));
+
+        dispatch({
+          type: "UPDATE_MESSAGE",
+          payload: {
+            id: aiMessage.id,
+            content: currentText,
+          },
+        });
+      }
     } catch (error) {
       console.error(error);
 

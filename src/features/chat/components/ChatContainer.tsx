@@ -12,7 +12,7 @@ export function ChatContainer() {
       <div className="p-4 text-xl font-semibold border-b">
         Enterprise Copilot
       </div>
-      <MessageList messages={messages} isLoading={isLoading}></MessageList>
+      <MessageList messages={messages}></MessageList>
       <ChatInput onSend={sendMessage} isLoading={isLoading}></ChatInput>
     </div>
   );
