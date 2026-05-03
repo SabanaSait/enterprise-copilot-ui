@@ -1,11 +1,13 @@
 "use client";
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import type {
   ChatMessage,
   ChatState,
   ChatAction,
   MessageStatus,
 } from "../types/chat.types";
+import { streamMessageFromAPI } from "@/lib/api/chat.api";
+import { APIError } from "@/lib/api/errors";
 
 const initialState: ChatState = {
   messages: [],
@@ -56,62 +58,81 @@ function createMessage(
   };
 }
 
-function mockAIResponse(userInput: string): Promise<string> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(`AI Response to: "${userInput}"`);
-    }, 1000);
-  });
-}
-
 export function useChat() {
   const [state, dispatch] = useReducer(chatReducer, initialState);
+
+  // For cancelling ongoing stream
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
 
+    // Cancel previous request if any
+    abortControllerRef.current?.abort();
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     const userMessage = createMessage("user", content);
     dispatch({ type: "ADD_MESSAGE", payload: userMessage });
-    dispatch({ type: "SET_LOADING", payload: true });
+
+    const aiMessage = createMessage("assistant", "", "typing");
+    dispatch({ type: "ADD_MESSAGE", payload: aiMessage });
+
+    let accumulatedContent = "";
 
     try {
-      const aiMessage = createMessage("assistant", "", "typing");
+      await streamMessageFromAPI(
+        content,
+        (chunk) => {
+          accumulatedContent += chunk;
 
-      dispatch({ type: "ADD_MESSAGE", payload: aiMessage });
-
-      const fullText = `AI Response to: "${content}"`;
-
-      let currentText = "";
-
-      for (let i = 0; i < fullText.length; i++) {
-        currentText += fullText[i];
-
-        await new Promise((resolve) => setTimeout(resolve, 20));
-
-        dispatch({
-          type: "UPDATE_MESSAGE",
-          payload: {
-            id: aiMessage.id,
-            content: currentText,
-          },
-        });
-      }
-    } catch (error) {
-      console.error(error);
-
-      const errorMessage = createMessage(
-        "assistant",
-        "Something went wrong. Please try again.",
+          dispatch({
+            type: "UPDATE_MESSAGE",
+            payload: {
+              id: aiMessage.id,
+              content: accumulatedContent,
+              status: "typing",
+            },
+          });
+        },
+        controller.signal,
       );
 
-      dispatch({ type: "ADD_MESSAGE", payload: errorMessage });
+      dispatch({
+        type: "UPDATE_MESSAGE",
+        payload: {
+          id: aiMessage.id,
+          status: "sent",
+        },
+      });
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.name === "AbortError") return;
+
+      let errorText = "Something went wrong. Please try again.";
+
+      if (error instanceof APIError) {
+        errorText = error.message;
+      }
+
+      dispatch({
+        type: "UPDATE_MESSAGE",
+        payload: {
+          id: aiMessage.id,
+          content: errorText,
+          status: "error",
+        },
+      });
     } finally {
-      // 5. Stop loading
       dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
   const resetChat = () => {
+    // Cancel any ongoing stream
+    abortControllerRef.current?.abort();
     dispatch({ type: "RESET_CHAT" });
   };
 
