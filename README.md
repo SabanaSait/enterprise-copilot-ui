@@ -1,40 +1,23 @@
 # Enterprise Copilot UI
 
-An AI-powered copilot interface designed for an enterprise SaaS admin platform.
+A modern copilot-style chat interface for enterprise SaaS platforms, built with real-time streaming UX and scalable frontend architecture.
 
-This project extends an existing full-stack system by introducing a React-based AI Copilot that enables intelligent interactions, real-time insights, and natural language-driven operations across the platform.
+This project focuses on implementing ChatGPT-like streaming interactions and preparing a foundation for AI-driven workflows.
+
+⚠️Note: AI responses are currently mocked to simulate streaming. Real LLM integration is planned.
 
 ## Related Repositories
 
-- **Admin Frontend (Angular):** [angular-enterprise-ui](https://github.com/SabanaSait/angular-enterprise-ui)
-- **Backend (NestJS API + WebSocket):** [enterprise-platform-backend](https://github.com/SabanaSait/enterprise-platform-backend)
+- Admin Frontend (Angular): [angular-enterprise-ui](https://github.com/SabanaSait/angular-enterprise-ui)
+- Backend (NestJS API + WebSocket): [enterprise-platform-backend](https://github.com/SabanaSait/enterprise-platform-backend)
 
 ## Features
 
-### AI Copilot
-
-- Context-aware chat interface
-- Natural language → system queries
-- AI-assisted user management workflows
-- Tool execution (create/update/delete users)
-
-### Metrics Intelligence
-
-- AI-generated summaries of dashboard metrics
-- Real-time insights powered by WebSocket events
-- Anomaly detection and activity explanations
-
-### Users Module Integration
-
-- AI-driven search, filtering, and sorting
-- Pagination-aware operations
-- Multi-tab synchronized updates
-
-### System Capabilities
-
-- Mock ↔ Live mode support
-- Backend contract-aligned APIs
-- Real-time event-driven architecture
+- Real-time streaming chat UI (ChatGPT-style)
+- Typing indicator with progressive rendering
+- Abortable requests using AbortController
+- Clean separation of API and UI layers
+- Backend-integrated streaming support
 
 ## Tech Stack
 
@@ -48,16 +31,26 @@ This project extends an existing full-stack system by introducing a React-based 
 ### Backend (Integrated)
 
 - NestJS
-- Socket.IO
-- REST APIs with pagination, sorting, search
+- Streaming HTTP responses
 
 ## Key Concepts
 
-- AI-assisted admin workflows
-- Context-aware UI interactions
-- Real-time system integration
-- Agent-like tool execution
-- Scalable frontend architecture
+- Real-time streaming chat (chunk-based rendering)
+- Custom `useChat` hook with reducer state management
+- API abstraction layer for backend communication
+- Streaming integration with NestJS backend
+- Scalable, feature-based frontend architecture
+
+> AI-related capabilities are planned and not yet implemented.
+
+## Streaming Behavior
+
+- User sends a message
+- Frontend reads response as a ReadableStream
+- Data is processed in chunks
+- UI updates incrementally (typing effect)
+
+> Note: Current backend returns a mocked (echo) response to simulate real AI streaming.
 
 ## Project Structure
 
@@ -66,24 +59,33 @@ src/
  ├── app/
  ├── components/
  ├── features/
- │    └── ai-copilot/
- ├── services/
+ │    └── chat/
+ ├── lib/api/
  ├── hooks/
  ├── store/
  └── types/
 ```
 
-## Getting Started
+## Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
+### Environment Setup
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
 ## Roadmap
 
-- [ ] AI chat UI (MVP)
-- [ ] Backend AI integration
+- [x] Streaming chat UI
+- [x] Backend streaming integration
+- [ ] LLM integration
 - [ ] Context-aware prompts
 - [ ] AI → API tool execution
 - [ ] Real-time AI insights
@@ -94,8 +96,12 @@ npm run dev
 
 ## Purpose
 
-This project demonstrates how AI can be integrated into enterprise admin platforms to improve operational efficiency, decision-making, and system interaction.
+This project demonstrates:
+
+- Real-time streaming UI patterns
+- Frontend architecture for AI-ready systems
+- Backend integration using streaming APIs
 
 ## Author
 
-Built as part of a full-stack portfolio showcasing frontend, backend, real-time systems, and AI integration.
+Built as part of a full-stack portfolio showcasing frontend, backend, real-time systems, and AI-ready architecture.
