@@ -7,8 +7,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-950 text-white">
-        <div className="flex h-screen">
+      <body className="bg-gray-900 text-white">
+        <div className="flex h-screen overflow-x-hidden">
           {/* Main Content */}
           <main className="flex-1 flex flex-col">{children}</main>
         </div>

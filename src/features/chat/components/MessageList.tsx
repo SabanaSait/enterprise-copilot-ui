@@ -16,17 +16,28 @@ export function MessageList({ messages }: Props) {
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-3">
-      <div className="max-w-3xl mx-auto w-full p-4 flex flex-col gap-3">
+    <div className="flex-1 overflow-y-auto custom-scrollbar">
+      <div className="max-w-3xl mx-auto w-full px-4 py-6 flex flex-col">
         {messages.length === 0 && (
-          <div className="text-gray-400 text-center mt-20">
-            Start a conversation with your Copilot
+          <div className="text-gray-400 text-center mt-24">
+            Start a conversation with your Copilot "Sana"
           </div>
         )}
 
-        {messages.map((msg) => (
-          <MessageItem key={msg.id} message={msg} />
-        ))}
+        {messages.map((msg, index) => {
+          const prevMessage = messages[index - 1];
+
+          const isGrouped = prevMessage && prevMessage.role === msg.role;
+
+          return (
+            <MessageItem
+              key={msg.id}
+              message={msg}
+              isGrouped={isGrouped}
+              isAvatarEnabled={true}
+            />
+          );
+        })}
 
         <div ref={bottomRef} />
       </div>

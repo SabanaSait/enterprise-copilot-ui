@@ -4,8 +4,6 @@ A modern copilot-style chat interface for enterprise SaaS platforms, built with 
 
 This project focuses on implementing ChatGPT-like streaming interactions and preparing a foundation for AI-driven workflows.
 
-⚠️Note: AI responses are currently mocked to simulate streaming. Real LLM integration is planned.
-
 ## Related Repositories
 
 - Admin Frontend (Angular): [angular-enterprise-ui](https://github.com/SabanaSait/angular-enterprise-ui)
