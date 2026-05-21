@@ -17,27 +17,26 @@ This UI integrates with an existing NodeJS (NestJS) backend and Angular admin da
 > Primary data flow: UI → Backend → AI Module → Model → Response
 
 ```text
-[Angular Admin UI] ───────────────┐
-                                 │
-                                 ▼
-                        [NestJS Backend]
-                                 │
-        ┌────────────────────────┼────────────────────────┐
-        │                        │                        │
- [Users Module]         [Metrics Module]      [WebSocket Gateway]
-                                 │
-                                 ▼
-                          [AI Module]
-                                 │
-         ┌───────────────────────┼───────────────────────┐
-         │                       │                       │
- [Prompt Processor]     [Context Builder]       [Tool Executor]
-                                 │
-                                 ▼
-                          [AI Model / LLM]
-                                 │
-                                 ▼
-                    [Next.js Copilot UI]
+[Admin UI]
+        ↓ (context only)
+[Next.js Copilot UI]
+        ↓ (message + context)
+POST /ai/chat
+        ↓
+[NestJS AI Module]
+        ↓
+ ┌──────────────────────────────────────────┐
+ │ Context Validator / Enhancer            │
+ │ Context Injection Layer                │
+ │ Conversation Memory                    │
+ │ Tool Router (context-aware)            │
+ │ Prompt Processor                       │
+ │ AI Model                               │
+ │ Tool Executor                          │
+ │ Response Formatter                     │
+ └──────────────────────────────────────────┘
+        ↓
+Response → UI
 ```
 
 ## 3. Core Components
@@ -79,11 +78,11 @@ User Prompt
    ↓
 Copilot UI
    ↓
-POST /ai/chat
+POST /ai/chat/stream
    ↓
 AI Module
    ↓
-Context Builder (injects page, filters, state)
+Context Validator / Enhancer
    ↓
 AI Model
    ↓

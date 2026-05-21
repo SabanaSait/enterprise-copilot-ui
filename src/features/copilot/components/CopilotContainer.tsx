@@ -3,15 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useChat } from "../hooks/useChat";
-import { MessageList } from "../components/MessageList";
-import { ChatInput } from "../components/ChatInput";
+import { MessageList } from "./MessageList";
+import { ChatInput } from "./ChatInput";
 
-export function ChatContainer({
+export function CopilotContainer({
   showHeader = true,
   onClose,
 }: {
   showHeader?: boolean;
   onClose?: () => void;
+  context?: any;
 }) {
   const { messages, isLoading, sendMessage } = useChat();
   const [isCollapsed, setIsCollapsed] = useState(true);

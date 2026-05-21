@@ -21,7 +21,7 @@ export default function MarkdownRenderer({ content }: Props) {
         ),
 
         p: ({ children }) => (
-          <p className="text-sm leading-relaxed mb-2">{children}</p>
+          <p className="text-sm leading-relaxed">{children}</p>
         ),
 
         ul: ({ children }) => (

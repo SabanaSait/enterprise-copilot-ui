@@ -1,5 +1,5 @@
-import { ChatContainer } from "@/features/chat/components/ChatContainer";
+import { CopilotContainer } from "@/features/copilot/components/CopilotContainer";
 
 export default function Home() {
-  return <ChatContainer />;
+  return <CopilotContainer />;
 }
