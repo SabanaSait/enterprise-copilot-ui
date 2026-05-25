@@ -58,7 +58,7 @@ function createMessage(
   };
 }
 
-export function useChat() {
+export function useChat(context?: any) {
   const [state, dispatch] = useReducer(chatReducer, initialState);
 
   // For cancelling ongoing stream
@@ -83,7 +83,10 @@ export function useChat() {
 
     try {
       await streamMessageFromAPI(
-        content,
+        {
+          message: content,
+          context,
+        },
         (chunk) => {
           accumulatedContent += chunk;
 

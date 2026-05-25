@@ -9,12 +9,13 @@ import { ChatInput } from "./ChatInput";
 export function CopilotContainer({
   showHeader = true,
   onClose,
+  context,
 }: {
   showHeader?: boolean;
   onClose?: () => void;
   context?: any;
 }) {
-  const { messages, isLoading, sendMessage } = useChat();
+  const { messages, isLoading, sendMessage } = useChat(context);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
